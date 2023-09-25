@@ -94,19 +94,29 @@ void convert(real_t rawValue, char* unitPrefix, char* unit, real_t unitExponent,
     bool convertedUnitPrefixGood = prefix.get(convertedUnitPrefix, convertedUnitPrefixValue);
     bool unitGood = units.get(unit, conversionForUnit);
     bool convertedUnitGood = units.get(convertedUnit, conversionForConvertedUnit);
-    /*if (!unitPrefixGood) {
-        printf("Getting the unit prefix failed! Result: %Lf\n", unitPrefixValue);
-    }
-    if (!convertedUnitPrefixGood) {
-        printf("Getting the output unit prefix failed! Result: %Lf\n", convertedUnitPrefixValue);
-    }
-    if (!unitGood) {
-        printf("Getting the unit failed!\n");
-    }
-    if (!convertedUnitGood) {
-        printf("Getting the output unit failed!\n");
-    } */
     if (!(unitPrefixGood && convertedUnitPrefixGood && unitGood && convertedUnitGood)) {
+        char buffer1[20];
+        char buffer2[50];
+        os_NewLine();
+        if (!unitPrefixGood) {
+            os_RealToStr(buffer1, &unitPrefixValue, 20, 1, -1);
+            snprintf(buffer2, 50, "Getting the unit prefix failed! Result: %s", buffer1);
+            os_PutStrFull(buffer2);
+        }
+        if (!convertedUnitPrefixGood) {
+            os_RealToStr(buffer1, &convertedUnitPrefixValue, 20, 1, -1);
+            snprintf(buffer2, 50, "Getting the output unit prefix failed! Result: %s", buffer1);
+            os_PutStrFull(buffer2);
+        }
+        if (!unitGood) {
+            os_PutStrFull("Getting the unit failed!");
+        }
+        if (!convertedUnitGood) {
+            os_PutStrFull("Getting the output unit failed!");
+        }
+        os_NewLine();
+        os_PutStrFull("Press any key to exit.");
+        while (!os_GetCSC());
         exit(1);
     }
     // rawValue + conversionForUnit.offset
